@@ -1,0 +1,10 @@
+- name: Maintenance
+  hosts: all
+  roles:
+    - etckeeper
+    - snap
+    - apt
+    - pacman
+    - docker
+    - flatpak
+    - vagrant

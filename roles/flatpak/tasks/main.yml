@@ -1,0 +1,10 @@
+- name: Check if flatpak is installed
+  command: flatpak --version
+  register: flatpak_version
+  changed_when: no
+  ignore_errors: yes
+
+- when: flatpak_version.rc == 0
+  name: Upgrade packages
+  command: flatpak update --noninteractive
+  become: yes

@@ -1,0 +1,23 @@
+- name: Check if snap is installed
+  command: snap --version
+  register: snap_version
+  changed_when: no
+  ignore_errors: yes
+
+- become: yes
+  when: snap_version.rc == 0 and etc_versioned
+  block:
+    - name: There are uncommitted changes
+      shell: cd /etc && git status --porcelain=v1
+      register: git_status
+      changed_when: no
+
+    - name: All changes are snap changes
+      shell: cd /etc && git status --porcelain=v1 | cut -c 4- | grep -G -v '^systemd/system/' | grep -G -v '/snap\.\|snap-'
+      register: only_snap
+      changed_when: no
+      ignore_errors: yes
+  
+    - name: Commit snap changes
+      command: etckeeper commit 'after snap run'
+      when: git_status.stdout and only_snap.rc != 0

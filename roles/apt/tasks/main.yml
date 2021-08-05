@@ -1,0 +1,23 @@
+- name: Find apt
+  command: apt-get --version
+  register: apt_version
+  changed_when: no
+  ignore_errors: yes
+
+- when: apt_version.rc == 0
+  become: yes
+  block:
+    - name: Upgrade packages
+      apt:
+        upgrade: full
+      notify:
+        - Reboot
+        - Wait for connectivity
+    
+    - name: Clean up dependencies
+      apt:
+        autoremove: yes
+        purge: yes
+      notify:
+        - Reboot
+        - Wait for connectivity

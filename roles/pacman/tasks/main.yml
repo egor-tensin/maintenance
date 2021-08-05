@@ -1,0 +1,48 @@
+- name: Check if pacman is installed
+  command: pacman --version
+  register: pacman_version
+  changed_when: no
+  ignore_errors: yes
+
+- when: pacman_version.rc == 0
+  become: yes
+  block:
+    - name: Upgrade packages
+      community.general.pacman:
+        update_cache: yes
+        upgrade: yes
+      notify:
+        - Reboot
+        - Wait for connectivity
+  rescue:
+    - fail:
+        msg: Upgrading packages failed for an unknown reason!
+      when: not etc_versioned
+
+    - name: There are uncommitted changes
+      shell: cd /etc && git status --porcelain=v1
+      register: git_status
+      changed_when: no
+
+    - fail:
+        msg: Upgrading packages failed for an unknown reason!
+      when: not git_status.stdout
+
+    - name: All changes are pacman.d/gnupg
+      shell: cd /etc && git status --porcelain=v1 | cut -c 4- | grep -G -v '^pacman.d/gnupg/'
+      register: only_gnupg
+      changed_when: no
+      ignore_errors: yes
+
+    - name: Commit pacman.d/gnupg
+      command: |
+        etckeeper commit 'pacman: GPG keys'
+      when: git_status.stdout and only_gnupg.rc != 0
+  
+    - name: Upgrade packages after GPG keys
+      community.general.pacman:
+        update_cache: yes
+        upgrade: yes
+      notify:
+        - Reboot
+        - Wait for connectivity

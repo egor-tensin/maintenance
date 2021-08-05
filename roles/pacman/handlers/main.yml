@@ -1,0 +1,8 @@
+- name: Reboot
+  reboot:
+  when: 'ansible_env["SSH_CLIENT"].split()[0] not in ansible_all_ipv4_addresses'
+
+- name: Wait for connectivity
+  # One of the nodes is the VPN server connecting all the other nodes, wait
+  # until all of them are back up:
+  wait_for_connection:
