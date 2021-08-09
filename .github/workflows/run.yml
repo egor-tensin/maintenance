@@ -1,0 +1,30 @@
+name: Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    name: Run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up WireGuard
+        uses: egor-tensin/setup-wireguard@v1
+        with:
+          endpoint: '${{ secrets.ENDPOINT }}'
+          endpoint_public_key: '${{ secrets.ENDPOINT_PUBLIC_KEY }}'
+          ips: '${{ secrets.IPS }}'
+          allowed_ips: '${{ secrets.ALLOWED_IPS }}'
+          private_key: '${{ secrets.WG_PRIVATE_KEY }}'
+          preshared_key: '${{ secrets.WG_PRESHARED_KEY }}'
+      - name: Set SSH key
+        run: |
+          touch .ansible-key
+          chmod 0600 .ansible-key
+          cat <<'EOF' > .ansible-key
+          ${{ secrets.SSH_KEY }}
+          EOF
+      - name: Run Ansible play
+        run: ansible-playbook --inventory inventory.ini --private-key .ansible-key maintenance.yml
