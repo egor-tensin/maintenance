@@ -11,9 +11,7 @@
     - name: Upgrade packages
       apt:
         upgrade: full
-      notify:
-        - Reboot
-        - Wait for connectivity
+      notify: reboot
 
     - name: Flush handlers
       meta: flush_handlers
@@ -22,9 +20,7 @@
       apt:
         autoremove: yes
         purge: yes
-      notify:
-        - Reboot
-        - Wait for connectivity
+      notify: reboot
 
     - name: Flush handlers
       meta: flush_handlers
