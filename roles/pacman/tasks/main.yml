@@ -15,6 +15,9 @@
       notify:
         - Reboot
         - Wait for connectivity
+
+    - name: Flush handlers
+      meta: flush_handlers
   rescue:
     - fail:
         msg: Upgrading packages failed for an unknown reason!
@@ -47,3 +50,6 @@
       notify:
         - Reboot
         - Wait for connectivity
+
+    - name: Flush handlers
+      meta: flush_handlers
