@@ -2,6 +2,7 @@
   command: docker --version
   register: docker_version
   changed_when: no
+  failed_when: no
   ignore_errors: yes
       
 - name: Clean up Docker data

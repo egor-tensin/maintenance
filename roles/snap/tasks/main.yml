@@ -2,6 +2,7 @@
   command: snap --version
   register: snap_version
   changed_when: no
+  failed_when: no
   ignore_errors: yes
 
 - become: yes

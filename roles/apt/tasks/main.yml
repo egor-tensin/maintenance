@@ -2,6 +2,7 @@
   command: apt-get --version
   register: apt_version
   changed_when: no
+  failed_when: no
   ignore_errors: yes
 
 - when: apt_version.rc == 0
