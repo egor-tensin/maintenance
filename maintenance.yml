@@ -4,6 +4,7 @@
     - snap
     - apt
     - pacman
+    - server
     - docker
     - flatpak
     - vagrant
