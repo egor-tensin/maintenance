@@ -9,12 +9,16 @@
   when: snap_version.rc == 0 and etc_versioned
   block:
     - name: There are uncommitted changes
-      shell: cd /etc && git status --porcelain=v1
+      command: git status --porcelain=v1
+      args:
+        chdir: /etc
       register: git_status
       changed_when: no
 
     - name: All changes are snap changes
-      shell: cd /etc && git status --porcelain=v1 | cut -c 4- | grep -G -v '^systemd/system/' | grep -G -v '/snap\.\|snap-'
+      shell: git status --porcelain=v1 | cut -c 4- | grep -G -v '^systemd/system/' | grep -G -v '/snap\.\|snap-'
+      args:
+        chdir: /etc
       register: only_snap
       changed_when: no
       ignore_errors: yes

@@ -22,7 +22,9 @@
       when: not etc_versioned
 
     - name: There are uncommitted changes
-      shell: cd /etc && git status --porcelain=v1
+      command: git status --porcelain=v1
+      args:
+        chdir: /etc
       register: git_status
       changed_when: no
 
@@ -31,7 +33,9 @@
       when: not git_status.stdout
 
     - name: All changes are pacman.d/gnupg
-      shell: cd /etc && git status --porcelain=v1 | cut -c 4- | grep -G -v '^pacman.d/gnupg/'
+      shell: git status --porcelain=v1 | cut -c 4- | grep -G -v '^pacman.d/gnupg/'
+      args:
+        chdir: /etc
       register: only_gnupg
       changed_when: no
       ignore_errors: yes
