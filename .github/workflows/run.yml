@@ -2,6 +2,11 @@ name: Run
 
 on:
   workflow_dispatch:
+    inputs:
+      hosts:
+        description: Inventory pattern
+        required: false
+        default: all
 
 jobs:
   run:
@@ -27,4 +32,4 @@ jobs:
           ${{ secrets.SSH_KEY }}
           EOF
       - name: Run Ansible play
-        run: ansible-playbook --inventory inventory.ini --private-key .ansible-key maintenance.yml
+        run: ansible-playbook --inventory inventory.ini --limit '${{ github.event.inputs.hosts }}' --private-key .ansible-key maintenance.yml
