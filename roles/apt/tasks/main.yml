@@ -1,4 +1,4 @@
-- name: Find apt
+- name: Check if apt is installed
   command: apt-get --version
   register: apt_version
   changed_when: no
