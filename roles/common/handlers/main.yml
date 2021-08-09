@@ -1,5 +1,14 @@
 - name: Reboot
   reboot:
+  args:
+    # On my trusty old Raspberry Pi 1 Model B+, /proc/sys/kernel/random/boot_id
+    # can sometimes stay the same between reboots. Apparently, not enough
+    # entropy or something.
+    boot_time_command: uptime -s
+    # Another option is `who -s`. This option requires Ansible 2.10 or later.
+
+    # 5 minutes is plenty.
+    reboot_timeout: 300
   # Don't reboot yourself accidentally:
   when: 'ansible_env["SSH_CLIENT"].split()[0] not in ansible_all_ipv4_addresses'
   listen: reboot
@@ -8,4 +17,7 @@
   # One of the nodes is the VPN server connecting all the other nodes, wait
   # until all of them are back up:
   wait_for_connection:
+  args:
+    # 5 minutes is plenty.
+    timeout: 300
   listen: reboot
