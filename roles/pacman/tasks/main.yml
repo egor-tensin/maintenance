@@ -11,7 +11,12 @@
       community.general.pacman:
         update_cache: yes
         upgrade: yes
+      register: pacman_result
       notify: reboot
+
+    - debug:
+        var: pacman_result.packages
+      when: pacman_result.changed
 
     - name: Flush handlers
       meta: flush_handlers
@@ -48,7 +53,12 @@
       community.general.pacman:
         update_cache: yes
         upgrade: yes
+      register: pacman_result
       notify: reboot
+
+    - debug:
+        var: pacman_result.packages
+      when: pacman_result.changed
 
     - name: Flush handlers
       meta: flush_handlers
