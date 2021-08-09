@@ -3,7 +3,6 @@
   register: vagrant_version
   changed_when: no
   failed_when: no
-  ignore_errors: yes
 
 - when: vagrant_version.rc == 0
   block:

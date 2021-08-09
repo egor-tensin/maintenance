@@ -3,7 +3,6 @@
   register: snap_version
   changed_when: no
   failed_when: no
-  ignore_errors: yes
 
 - become: yes
   when: snap_version.rc == 0 and etc_versioned

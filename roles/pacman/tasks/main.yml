@@ -3,7 +3,6 @@
   register: pacman_version
   changed_when: no
   failed_when: no
-  ignore_errors: yes
 
 - when: pacman_version.rc == 0
   become: yes

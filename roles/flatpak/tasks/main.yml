@@ -3,7 +3,6 @@
   register: flatpak_version
   changed_when: no
   failed_when: no
-  ignore_errors: yes
 
 - when: flatpak_version.rc == 0
   name: Upgrade packages
