@@ -13,6 +13,7 @@
         chdir: /etc
       register: git_status
       changed_when: no
+      failed_when: no
 
     - name: All changes are snap changes
       shell: git status --porcelain=v1 | cut -c 4- | grep -G -v '^systemd/system/' | grep -G -v '/snap\.\|snap-'
@@ -20,7 +21,7 @@
         chdir: /etc
       register: only_snap
       changed_when: no
-      ignore_errors: yes
+      failed_when: no
   
     - name: Commit snap changes
       command: etckeeper commit 'after snap run'

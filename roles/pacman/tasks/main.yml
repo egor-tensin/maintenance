@@ -31,6 +31,7 @@
         chdir: /etc
       register: git_status
       changed_when: no
+      failed_when: no
 
     - fail:
         msg: Upgrading packages failed for an unknown reason!
@@ -42,7 +43,7 @@
         chdir: /etc
       register: only_gnupg
       changed_when: no
-      ignore_errors: yes
+      failed_when: no
 
     - name: Commit pacman.d/gnupg
       command: |
