@@ -11,6 +11,7 @@
     reboot_timeout: 300
   # Don't reboot yourself accidentally:
   when: 'ansible_env["SSH_CLIENT"].split()[0] not in ansible_all_ipv4_addresses'
+  become: yes
   listen: reboot
 
 - name: Wait for connectivity
