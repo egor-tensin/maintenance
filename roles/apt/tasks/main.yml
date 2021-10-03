@@ -9,6 +9,7 @@
   block:
     - name: Upgrade packages
       apt:
+        update_cache: yes
         upgrade: full
       notify: reboot
 
