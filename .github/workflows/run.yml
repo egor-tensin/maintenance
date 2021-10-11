@@ -24,12 +24,9 @@ jobs:
           allowed_ips: '${{ secrets.ALLOWED_IPS }}'
           private_key: '${{ secrets.WG_PRIVATE_KEY }}'
           preshared_key: '${{ secrets.WG_PRESHARED_KEY }}'
-      - name: Set SSH key
-        run: |
-          touch .ansible-key
-          chmod 0600 .ansible-key
-          cat <<'EOF' > .ansible-key
-          ${{ secrets.SSH_KEY }}
-          EOF
+      - name: webfactory/ssh-agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: '${{ secrets.SSH_KEY }}'
       - name: Run Ansible play
         run: make run limit='${{ github.event.inputs.hosts }}'

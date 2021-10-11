@@ -27,8 +27,4 @@ all: run
 
 .PHONY: run
 run:
-ifdef CI
-	ansible-playbook --inventory inventory.ini --limit '$(call escape,$(limit))' --private-key .ansible-key maintenance.yml
-else
 	ansible-playbook --inventory inventory.ini --limit '$(call escape,$(limit))' maintenance.yml
-endif
