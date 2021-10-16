@@ -24,7 +24,7 @@ jobs:
           allowed_ips: '${{ secrets.ALLOWED_IPS }}'
           private_key: '${{ secrets.WG_PRIVATE_KEY }}'
           preshared_key: '${{ secrets.WG_PRESHARED_KEY }}'
-      - name: webfactory/ssh-agent
+      - name: Set up ssh-agent
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: '${{ secrets.SSH_KEY }}'
