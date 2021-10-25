@@ -6,12 +6,14 @@
       
 - name: Clean up Docker data
   become: yes
-  community.docker.docker_prune:
-    containers: yes
-    images: yes
-    images_filters:
-      dangling: false
-    networks: yes
-    volumes: yes
-    builder_cache: yes
+  command: docker system prune -a -f --volumes
+  # Broken after a Docker upgrade:
+  #community.docker.docker_prune:
+  #  containers: yes
+  #  images: yes
+  #  images_filters:
+  #    dangling: false
+  #  networks: yes
+  #  volumes: yes
+  #  builder_cache: yes
   when: docker_version.rc == 0
