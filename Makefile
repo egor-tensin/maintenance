@@ -25,6 +25,10 @@ $(eval $(call noexpand,limit))
 .PHONY: all
 all: run
 
+.PHONY: deps
+deps:
+	ansible-galaxy collection install -r requirements.yml
+
 .PHONY: run
 run:
 	ansible-playbook --inventory inventory.ini --limit '$(call escape,$(limit))' maintenance.yml

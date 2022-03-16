@@ -1,0 +1,8 @@
+---
+collections:
+  # Apparently, Pacman developers thought it was a good idea to change the flag
+  # --sys-upgrade to --sysupgrade, which was incredibly bright on their part.
+  # Even if my reasonably up-to-date Ansible doesn't carry the fix:
+  # https://github.com/ansible-collections/community.general/commit/b9f62bb4ef7808c0220d154c10c1c846f7c3361e
+  - name: community.general
+    version: 4.6.0
