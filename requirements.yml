@@ -6,3 +6,6 @@ collections:
   # https://github.com/ansible-collections/community.general/commit/b9f62bb4ef7808c0220d154c10c1c846f7c3361e
   - name: community.general
     version: 4.6.0
+  # Yay-compatible module:
+  - name: kewlfft.aur
+    version: 0.10.0

@@ -1,0 +1,23 @@
+- name: Check if yay is installed
+  command: yay --version
+  register: yay_version
+  changed_when: no
+  failed_when: no
+
+- when: yay_version.rc == 0
+  block:
+    - name: Upgrade packages
+      kewlfft.aur.aur:
+        use: yay
+        update_cache: yes
+        upgrade: yes
+        aur_only: yes
+      register: yay_result
+      notify: reboot
+
+    - debug:
+        var: yay_result
+      when: yay_result
+
+    - name: Flush handlers
+      meta: flush_handlers

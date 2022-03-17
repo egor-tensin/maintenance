@@ -4,6 +4,7 @@
     - snap
     - apt
     - pacman
+    - yay
     - my_server
     - docker
     - flatpak
