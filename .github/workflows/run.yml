@@ -28,5 +28,7 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: '${{ secrets.SSH_KEY }}'
+      - name: Install collections
+        run: make deps
       - name: Run Ansible play
         run: make run limit='${{ github.event.inputs.hosts }}'
