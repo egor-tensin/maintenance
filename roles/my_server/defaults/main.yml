@@ -1,1 +1,1 @@
-server_dir: '{{ ansible_env.HOME }}/server'
+server_dir: /srv/server
