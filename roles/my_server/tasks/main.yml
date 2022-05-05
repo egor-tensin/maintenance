@@ -1,4 +1,5 @@
 - name: 'Check if {{ server_dir }}/docker-compose.yml exists'
+  become: true
   stat:
     path: '{{ server_dir }}/docker-compose.yml'
   register: server_exists
