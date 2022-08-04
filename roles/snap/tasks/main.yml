@@ -7,7 +7,7 @@
 - become: yes
   when: snap_version.rc == 0 and etc_versioned
   block:
-    - name: There are uncommitted changes
+    - name: Check for changes in /etc
       command: git status --porcelain=v1
       args:
         chdir: /etc
@@ -15,7 +15,7 @@
       changed_when: no
       failed_when: no
 
-    - name: All changes are snap changes
+    - name: All changes in /etc are snap changes?
       shell: git status --porcelain=v1 | cut -c 4- | grep -G -v '^systemd/system/' | grep -G -v '/snap\.\|snap-'
       args:
         chdir: /etc
@@ -23,6 +23,6 @@
       changed_when: no
       failed_when: no
 
-    - name: Commit snap changes
+    - name: Commit changes in /etc
       command: etckeeper commit 'after snap run'
       when: git_status.stdout and only_snap.rc != 0
