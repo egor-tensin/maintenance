@@ -3,7 +3,7 @@
   register: docker_version
   changed_when: no
   failed_when: no
-      
+
 - name: Clean up Docker data
   become: yes
   command: docker system prune -a -f --volumes

@@ -22,7 +22,7 @@
       register: only_snap
       changed_when: no
       failed_when: no
-  
+
     - name: Commit snap changes
       command: etckeeper commit 'after snap run'
       when: git_status.stdout and only_snap.rc != 0

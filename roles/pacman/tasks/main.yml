@@ -49,7 +49,7 @@
       command: |
         etckeeper commit 'pacman: GPG keys'
       when: git_status.stdout and only_gnupg.rc != 0
-  
+
     - name: Upgrade packages after GPG keys
       community.general.pacman:
         update_cache: yes
