@@ -1,0 +1,44 @@
+- name: Check if rate-mirrors is installed
+  command: rate-mirrors --version
+  register: rate_mirrors_version
+  changed_when: false
+  failed_when: false
+
+- when: rate_mirrors_version.rc == 0
+  become: true
+  block:
+    - when: etc_versioned
+      block:
+        - name: Check for changes in /etc
+          command: git status --porcelain=v1
+          args:
+            chdir: /etc
+          register: git_status
+          changed_when: false
+          failed_when: false
+
+        - fail:
+            msg: There are uncommitted changes in /etc
+          when: git_status.stdout
+
+    - name: Rate pacman mirrors
+      shell: |
+        . /etc/os-release && rate-mirrors --allow-root --disable-comments --save=/etc/pacman.d/mirrorlist "$ID"
+
+    - when: etc_versioned
+      block:
+        - name: Check for changes in /etc
+          command: git status --porcelain=v1
+          args:
+            chdir: /etc
+          register: git_status
+          changed_when: false
+          failed_when: false
+
+        - fail:
+            msg: How did this happen?
+          when: git_status.stdout != ' M pacman.d/mirrorlist'
+
+        - name: Commit changes in /etc/pacman.d/mirrorlist
+          command: |
+            etckeeper commit 'rate-mirrors'

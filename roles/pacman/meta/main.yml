@@ -1,3 +1,4 @@
 dependencies:
   - role: common
   - role: etckeeper
+  - role: rate_mirrors
