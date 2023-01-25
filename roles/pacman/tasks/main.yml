@@ -1,11 +1,4 @@
-- name: Check if pacman is installed
-  command: pacman --version
-  register: pacman_version
-  changed_when: false
-  failed_when: false
-
-- when: pacman_version.rc == 0
-  become: true
+- become: true
   block:
     - name: Upgrade packages
       community.general.pacman:

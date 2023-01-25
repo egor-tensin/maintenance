@@ -1,11 +1,4 @@
-- name: Check if rate-mirrors is installed
-  command: rate-mirrors --version
-  register: rate_mirrors_version
-  changed_when: false
-  failed_when: false
-
-- when: rate_mirrors_version.rc == 0
-  become: true
+- become: true
   block:
     - when: etc_versioned
       block:

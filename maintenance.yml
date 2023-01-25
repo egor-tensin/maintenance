@@ -1,11 +1,12 @@
 - name: Maintenance
   hosts: all
   roles:
-    - snap
-    - apt
-    - pacman
-    - yay
+    - common
+    - {role: snap,    when: has_snap}
+    - {role: apt,     when: has_apt}
+    - {role: pacman,  when: has_pacman}
+    - {role: yay,     when: has_yay}
+    - {role: flatpak, when: has_flatpak}
+    - {role: vagrant, when: has_vagrant}
     - my_server
-    - docker
-    - flatpak
-    - vagrant
+    - {role: docker,  when: has_docker}

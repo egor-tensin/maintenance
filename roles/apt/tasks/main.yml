@@ -1,26 +1,19 @@
-- name: Check if apt is installed
-  command: apt-get --version
-  register: apt_version
-  changed_when: false
-  failed_when: false
-
-- when: apt_version.rc == 0
+- name: Upgrade packages
   become: true
-  block:
-    - name: Upgrade packages
-      apt:
-        update_cache: true
-        upgrade: full
-      notify: reboot
+  apt:
+    update_cache: true
+    upgrade: full
+  notify: reboot
 
-    - name: Flush handlers
-      meta: flush_handlers
+- name: Flush handlers
+  meta: flush_handlers
 
-    - name: Clean up dependencies
-      apt:
-        autoremove: true
-        purge: true
-      notify: reboot
+- name: Clean up dependencies
+  become: true
+  apt:
+    autoremove: true
+    purge: true
+  notify: reboot
 
-    - name: Flush handlers
-      meta: flush_handlers
+- name: Flush handlers
+  meta: flush_handlers

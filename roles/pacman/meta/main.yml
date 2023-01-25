@@ -1,4 +1,4 @@
 dependencies:
   - role: common
-  - role: etckeeper
-  - role: rate_mirrors
+  - {role: etckeeper,    when: etc_versioned}
+  - {role: rate_mirrors, when: has_rate_mirrors}

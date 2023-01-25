@@ -1,0 +1,16 @@
+- include_tasks: tool.yml
+  loop:
+    - apt
+    - docker
+    - flatpak
+    - pacman
+    - rate-mirrors
+    - snap
+    - vagrant
+    - yay
+
+- name: Check if /etc is versioned
+  become: true
+  stat:
+    path: /etc/.git/config
+  register: etc_versioned
