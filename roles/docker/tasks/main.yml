@@ -1,19 +1,19 @@
 - name: Check if Docker is installed
   command: docker --version
   register: docker_version
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
 
 - name: Clean up Docker data
-  become: yes
+  become: true
   command: docker system prune -a -f --volumes
   # Broken after a Docker upgrade:
   #community.docker.docker_prune:
-  #  containers: yes
-  #  images: yes
+  #  containers: true
+  #  images: true
   #  images_filters:
   #    dangling: false
-  #  networks: yes
-  #  volumes: yes
-  #  builder_cache: yes
+  #  networks: true
+  #  volumes: true
+  #  builder_cache: true
   when: docker_version.rc == 0

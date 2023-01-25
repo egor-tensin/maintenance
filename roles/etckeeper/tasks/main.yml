@@ -1,4 +1,4 @@
-- become: yes
+- become: true
   block:
     - name: Check if /etc is versioned
       stat:

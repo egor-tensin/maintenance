@@ -1,8 +1,8 @@
 - name: Check if vagrant is installed
   command: vagrant --version
   register: vagrant_version
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
 
 - when: vagrant_version.rc == 0
   block:
@@ -11,7 +11,7 @@
 
     - name: Prune invalid entries
       command: vagrant global-status --prune
-      become: yes
+      become: true
 
     - name: Clean up boxes
       command: vagrant box prune --force --keep-active-boxes

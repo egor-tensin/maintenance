@@ -1,17 +1,17 @@
 - name: Check if yay is installed
   command: yay --version
   register: yay_version
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
 
 - when: yay_version.rc == 0
   block:
     - name: Upgrade packages
       kewlfft.aur.aur:
         use: yay
-        update_cache: yes
-        upgrade: yes
-        aur_only: yes
+        update_cache: true
+        upgrade: true
+        aur_only: true
       register: yay_result
       notify: reboot
 

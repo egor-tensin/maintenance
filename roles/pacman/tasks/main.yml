@@ -1,16 +1,16 @@
 - name: Check if pacman is installed
   command: pacman --version
   register: pacman_version
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
 
 - when: pacman_version.rc == 0
-  become: yes
+  become: true
   block:
     - name: Upgrade packages
       community.general.pacman:
-        update_cache: yes
-        upgrade: yes
+        update_cache: true
+        upgrade: true
       register: pacman_result
       notify: reboot
 
@@ -30,8 +30,8 @@
       args:
         chdir: /etc
       register: git_status
-      changed_when: no
-      failed_when: no
+      changed_when: false
+      failed_when: false
 
     - fail:
         msg: Upgrading packages failed for an unknown reason!
@@ -42,8 +42,8 @@
       args:
         chdir: /etc
       register: only_gnupg
-      changed_when: no
-      failed_when: no
+      changed_when: false
+      failed_when: false
 
     - name: Commit changes in /etc
       command: |
@@ -52,8 +52,8 @@
 
     - name: Upgrade packages after GPG keys
       community.general.pacman:
-        update_cache: yes
-        upgrade: yes
+        update_cache: true
+        upgrade: true
       register: pacman_result
       notify: reboot
 
