@@ -2,6 +2,7 @@
   hosts: all
   roles:
     - common
+    - dotfiles
     - {role: snap,    when: has_snap}
     - {role: apt,     when: has_apt}
     - {role: pacman,  when: has_pacman}

@@ -1,0 +1,29 @@
+- name: ssh-agent hack
+  acl:
+    name: "{{ item }}"
+    etype: user
+    entity: "{{ dotfiles_user }}"
+    permissions: rwx
+    state: present
+  loop:
+    - "{{ ansible_env.SSH_AUTH_SOCK | dirname }}"
+    - "{{ ansible_env.SSH_AUTH_SOCK }}"
+
+- name: Update my dotfiles
+  become: true
+  become_user: "{{ dotfiles_user }}"
+  block:
+    - name: Pull repositories
+      git:
+        accept_hostkey: true
+        dest: "~/workspace/personal/{{ item }}"
+        repo: "git@github.com:egor-tensin/{{ item }}.git"
+      loop:
+        - linux-home
+        - config-links
+
+    - name: Run links-update
+      shell: |
+        ../config-links/links-update && ../config-links/links-chmod go-w
+      args:
+        chdir: ~/workspace/personal/linux-home
