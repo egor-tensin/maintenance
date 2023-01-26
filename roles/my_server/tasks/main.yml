@@ -5,20 +5,12 @@
   register: server_exists
 
 - when: server_exists.stat.exists
+  name: Update containers
   become: true
-  block:
-    # community.docker.docker_compose is too confusing for me to use, sorry.
-    - name: docker-compose pull
-      command: docker-compose pull --quiet
-      args:
-        chdir: '{{ server_dir }}'
-
-    - name: docker-compose build
-      command: docker-compose build --pull
-      args:
-        chdir: '{{ server_dir }}'
-
-    - name: docker-compose up
-      command: docker-compose up -d
-      args:
-        chdir: '{{ server_dir }}'
+  # community.docker.docker_compose is too confusing for me to use, sorry.
+  shell: |
+    docker-compose pull --quiet && \
+        docker-compose build --pull && \
+        docker-compose up -d
+  args:
+    chdir: '{{ server_dir }}'
