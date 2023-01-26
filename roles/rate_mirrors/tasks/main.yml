@@ -16,7 +16,11 @@
 
     - name: Rate pacman mirrors
       shell: |
-        . /etc/os-release && rate-mirrors --allow-root --disable-comments --save=/etc/pacman.d/mirrorlist "$ID"
+        . /etc/os-release && rate-mirrors \
+            --allow-root \
+            --disable-comments \
+            --save=/etc/pacman.d/mirrorlist \
+            "$ID"
 
     - when: etc_versioned
       block:

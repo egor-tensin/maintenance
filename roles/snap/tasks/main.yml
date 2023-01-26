@@ -9,7 +9,11 @@
       failed_when: false
 
     - name: All changes in /etc are snap changes?
-      shell: git status --porcelain=v1 | cut -c 4- | grep -G -v '^systemd/system/' | grep -G -v '/snap\.\|snap-'
+      shell: |
+        git status --porcelain=v1 \
+            | cut -c 4- \
+            | grep -G -v '^systemd/system/' \
+            | grep -G -v '/snap\.\|snap-'
       args:
         chdir: /etc
       register: only_snap
