@@ -1,11 +1,4 @@
-- name: Check if snap is installed
-  command: snap --version
-  register: snap_version
-  changed_when: false
-  failed_when: false
-
 - become: true
-  when: snap_version.rc == 0 and etc_versioned
   block:
     - name: Check for changes in /etc
       command: git status --porcelain=v1

@@ -3,7 +3,7 @@
   roles:
     - common
     - dotfiles
-    - {role: snap,    when: has_snap}
+    - {role: snap,    when: has_snap and etc_versioned}
     - {role: apt,     when: has_apt}
     - {role: pacman,  when: has_pacman}
     - {role: yay,     when: has_yay}
