@@ -23,6 +23,8 @@ endef
 limit ?= all
 $(eval $(call noexpand,limit))
 
+args := --inventory inventory.ini --limit '$(call escape,$(limit))'
+
 .PHONY: all
 all: run
 
@@ -32,4 +34,9 @@ deps:
 
 .PHONY: run
 run:
-	ansible-playbook --inventory inventory.ini --limit '$(call escape,$(limit))' maintenance.yml
+	ansible-playbook $(args) maintenance.yml
+
+.PHONY: reboot
+reboot:
+	ansible $(args) --become -m reboot '*'
+	ansible $(args) -m wait_for_connection '*'
