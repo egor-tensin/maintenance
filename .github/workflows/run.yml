@@ -6,7 +6,7 @@ on:
       hosts:
         description: Inventory pattern
         required: false
-        default: all
+        default: cloud
 
 jobs:
   run:
