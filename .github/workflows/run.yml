@@ -31,4 +31,4 @@ jobs:
       - name: Install collections
         run: make deps
       - name: Run Ansible play
-        run: make run limit='${{ github.event.inputs.hosts }}'
+        run: make run LIMIT='${{ github.event.inputs.hosts }}'

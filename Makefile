@@ -20,10 +20,10 @@ ifeq ($$(origin $(1)),command line)
 endif
 endef
 
-limit ?= all
-$(eval $(call noexpand,limit))
+LIMIT ?= all
+$(eval $(call noexpand,LIMIT))
 
-args := --inventory inventory.ini --limit '$(call escape,$(limit))'
+args := --inventory inventory.ini --limit '$(call escape,$(LIMIT))'
 
 .PHONY: all
 all: run
