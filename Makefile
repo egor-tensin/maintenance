@@ -20,10 +20,11 @@ ifeq ($$(origin $(1)),command line)
 endif
 endef
 
-LIMIT ?= all
-$(eval $(call noexpand,LIMIT))
+.SECONDEXPANSION:
 
-args := --inventory inventory.ini --limit '$(call escape,$(LIMIT))'
+LIMIT ?= all
+
+args := --inventory inventory.ini --limit '$(LIMIT)'
 
 .PHONY: all
 all: run
@@ -40,3 +41,7 @@ run:
 reboot:
 	ansible $(args) --become -m reboot '*'
 	ansible $(args) -m wait_for_connection '*'
+
+.PHONY: reboot/cloud
+reboot/cloud: LIMIT := cloud
+reboot/cloud: run
