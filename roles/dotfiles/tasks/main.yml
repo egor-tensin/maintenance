@@ -22,8 +22,7 @@
         - linux-home
         - config-links
 
-    - name: Run links-update
-      shell: |
-        ../config-links/links-update && ../config-links/links-chmod go-w
+    - name: Run update.sh
+      command: ./update.sh
       args:
         chdir: ~/workspace/personal/linux-home
