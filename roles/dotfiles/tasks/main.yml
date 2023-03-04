@@ -26,3 +26,8 @@
       command: ./update.sh
       args:
         chdir: ~/workspace/personal/linux-home
+
+    - name: Update Vim plugins
+      command: ./vim_plugins.sh
+      args:
+        chdir: ~/workspace/personal/linux-home
