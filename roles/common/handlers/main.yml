@@ -1,5 +1,5 @@
 - name: Reboot
-  reboot:
+  ansible.builtin.reboot:
   args:
     # On my trusty old Raspberry Pi 1 Model B+, /proc/sys/kernel/random/boot_id
     # can sometimes stay the same between reboots. Apparently, not enough
@@ -17,7 +17,7 @@
 - name: Wait for connectivity
   # One of the nodes is the VPN server connecting all the other nodes, wait
   # until all of them are back up:
-  wait_for_connection:
+  ansible.builtin.wait_for_connection:
   args:
     # 5 minutes is plenty.
     timeout: 300

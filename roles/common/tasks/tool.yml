@@ -1,8 +1,8 @@
 - name: "Check for {{ item }}"
-  command: "{{ item }} --version"
+  ansible.builtin.command: "{{ item }} --version"
   register: cmd_result
   changed_when: false
   failed_when: false
 
 - name: "Set fact about {{ item }}"
-  set_fact: "has_{{ item | replace('-', '_') }}={{ cmd_result.rc == 0 }}"
+  ansible.builtin.set_fact: "has_{{ item | replace('-', '_') }}={{ cmd_result.rc == 0 }}"

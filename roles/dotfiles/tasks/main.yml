@@ -1,5 +1,5 @@
 - name: ssh-agent hack
-  acl:
+  ansible.posix.acl:
     name: "{{ item }}"
     etype: user
     entity: "{{ dotfiles_user }}"
@@ -14,7 +14,7 @@
   become_user: "{{ dotfiles_user }}"
   block:
     - name: Pull repositories
-      git:
+      ansible.builtin.git:
         accept_hostkey: true
         dest: "~/workspace/personal/{{ item }}"
         repo: "git@github.com:egor-tensin/{{ item }}.git"
@@ -23,11 +23,11 @@
         - config-links
 
     - name: Run update.sh
-      command: ./update.sh
+      ansible.builtin.command: ./update.sh
       args:
         chdir: ~/workspace/personal/linux-home
 
     - name: Update Vim plugins
-      command: ./vim_plugins.sh
+      ansible.builtin.command: ./vim_plugins.sh
       args:
         chdir: ~/workspace/personal/linux-home

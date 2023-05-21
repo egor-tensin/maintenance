@@ -1,14 +1,14 @@
 - name: 'Check if {{ server_dir }}/docker-compose.yml exists'
   become: true
-  stat:
+  ansible.builtin.stat:
     path: '{{ server_dir }}/docker-compose.yml'
   register: server_exists
 
-- when: server_exists.stat.exists
-  name: Update containers
+- name: Update containers
+  when: server_exists.stat.exists
   become: true
   # community.docker.docker_compose is too confusing for me to use, sorry.
-  shell: |
+  ansible.builtin.shell: |
     docker-compose pull -q && \
         docker-compose build --force-rm --pull -q && \
         docker-compose up --remove-orphans -d

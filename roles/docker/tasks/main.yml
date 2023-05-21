@@ -1,12 +1,3 @@
 - name: Clean up Docker data
   become: true
-  command: docker system prune -a -f --volumes
-  # Broken after a Docker upgrade:
-  #community.docker.docker_prune:
-  #  containers: true
-  #  images: true
-  #  images_filters:
-  #    dangling: false
-  #  networks: true
-  #  volumes: true
-  #  builder_cache: true
+  ansible.builtin.command: docker system prune -a -f --volumes

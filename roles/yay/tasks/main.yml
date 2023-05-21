@@ -7,9 +7,10 @@
   register: yay_result
   notify: reboot
 
-- debug:
+- name: Show yay result
+  ansible.builtin.debug:
     var: yay_result
   when: yay_result
 
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers

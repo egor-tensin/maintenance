@@ -1,4 +1,5 @@
-- become: true
+- name: Make sure git is configured
+  become: true
   block:
     - name: Set user.name
       community.general.git_config:
