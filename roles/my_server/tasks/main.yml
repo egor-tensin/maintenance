@@ -9,8 +9,8 @@
   become: true
   # community.docker.docker_compose is too confusing for me to use, sorry.
   shell: |
-    docker-compose pull --quiet && \
-        docker-compose build --pull && \
-        docker-compose up -d
+    docker-compose pull -q && \
+        docker-compose build --force-rm --pull -q && \
+        docker-compose up --remove-orphans -d
   args:
     chdir: '{{ server_dir }}'
