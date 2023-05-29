@@ -1,6 +1,6 @@
 - name: ssh-agent hack
   ansible.posix.acl:
-    name: "{{ item }}"
+    path: "{{ item }}"
     etype: user
     entity: "{{ dotfiles_user }}"
     permissions: rwx
