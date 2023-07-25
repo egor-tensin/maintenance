@@ -20,14 +20,8 @@
         repo: "git@github.com:egor-tensin/{{ item }}.git"
       loop:
         - linux-home
-        - config-links
 
-    - name: Run update.sh
-      ansible.builtin.command: ./update.sh
-      args:
-        chdir: ~/workspace/personal/linux-home
-
-    - name: Update Vim plugins
-      ansible.builtin.command: ./vim_plugins.sh
+    - name: Run setup.sh
+      ansible.builtin.command: ./setup.sh
       args:
         chdir: ~/workspace/personal/linux-home
