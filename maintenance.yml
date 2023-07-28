@@ -9,5 +9,4 @@
     - {role: yay,     when: has_yay}
     - {role: flatpak, when: has_flatpak}
     - {role: vagrant, when: has_vagrant}
-    - my_server
     - {role: docker,  when: has_docker}
