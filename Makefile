@@ -3,8 +3,9 @@ include prelude.mk
 .SECONDEXPANSION:
 
 LIMIT ?= all
+$(eval $(call noexpand,LIMIT))
 
-args := --inventory inventory.ini --limit '$(LIMIT)'
+args := --inventory inventory.ini --limit '$(call escape,$(LIMIT))'
 
 .PHONY: all
 all: run
