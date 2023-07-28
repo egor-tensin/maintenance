@@ -1,7 +1,5 @@
 include prelude.mk
 
-.SECONDEXPANSION:
-
 LIMIT ?= all
 $(eval $(call noexpand,LIMIT))
 
