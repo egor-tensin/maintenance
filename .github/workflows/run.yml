@@ -28,6 +28,16 @@ jobs:
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: '${{ secrets.SSH_KEY }}'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+          cache: pip
+      - name: Install Ansible
+        run: pip install -q -r requirements.txt
+      - name: Make sure Ansible version is correct
+        run: |
+          ansible-playbook --version | grep -F 2.14.
       - name: Install dependencies
         run: make deps
       - name: Run Ansible
