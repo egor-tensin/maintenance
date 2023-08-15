@@ -21,7 +21,7 @@
         . /etc/os-release && rate-mirrors \
             --allow-root \
             --disable-comments \
-            --save-to-file /etc/pacman.d/mirrorlist \
+            --save /etc/pacman.d/mirrorlist \
             "$ID"
 
     - name: Commit pacman.d/mirrorlist
