@@ -1,3 +1,11 @@
+**This repo has been retired.
+In was a badly-structured Ansible project anyway, albeit useful.
+I automated my infrastructure using Terraform (see [infra-terraform]) & moved
+most of Ansible to a proper collection (see [infra-ansible]).**
+
+[infra-terraform]: https://github.com/egor-tensin/infra-terraform
+[infra-ansible]: https://github.com/egor-tensin/infra-ansible
+
 Maintenance
 ===========
 
