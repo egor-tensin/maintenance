@@ -15,16 +15,16 @@ jobs:
     steps:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
-      - name: Add SSH key
+      - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
           cat > ~/.ssh/config <<'EOF'
           StrictHostKeyChecking no
           EOF
-          cat > ~/.ssh/id_ed25519 <<'EOF'
-          ${{ secrets.SSH_KEY }}
-          EOF
-          chmod 0600 ~/.ssh/id_ed25519
+      - name: Set up ssh-agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: '${{ secrets.SSH_KEY }}'
       - name: Checkout
         run: |
           git clone -q ssh://git@bitbucket.org/egor-tensin/infra.git
