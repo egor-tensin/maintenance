@@ -1,0 +1,37 @@
+name: Maintenance
+
+on:
+  - push
+  - workflow_dispatch
+
+jobs:
+  yandex-cloud-cli-bin:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
+    steps:
+      - name: Install dependencies
+        run: |
+          pacman -Sy --noconfirm git openssh
+
+          mkdir -p /root/.ssh
+          cat > /root/.ssh/config <<'EOF'
+          StrictHostKeyChecking no
+          EOF
+      - name: Add SSH key
+        run: |
+          mkdir -p /root/.ssh/
+          cat > /root/.ssh/id_ed25519 <<'EOF'
+          ${{ secrets.SSH_KEY }}
+          EOF
+          chmod 0600 /root/.ssh/id_ed25519
+      - name: Checkout
+        run: |
+          git clone -q ssh://aur@aur.archlinux.org/yandex-cloud-cli-bin.git
+          chmod -R o+w yandex-cloud-cli-bin
+      - name: Run maintenance
+        run: |
+          git config --system --add safe.directory "$( pwd )/yandex-cloud-cli-bin"
+          # Stupid makepkg hard forbids running as root, which is stupid, which
+          # is why I'm doing all of that stupidity here and above.
+          runuser -u nobody -- make -C yandex-cloud-cli-bin maintenance
