@@ -1,0 +1,65 @@
+name: Jekyll
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  maintenance:
+    strategy:
+      matrix:
+        project:
+          - repo: blog
+            branch: gh-pages
+          - repo: egor-tensin.github.io
+            branch: master
+          - repo: fucktipp.ing
+            branch: master
+          - repo: jekyll-theme
+            branch: master
+          - repo: sorting-algorithms
+            branch:  gh-pages
+          - repo: wireguard-config
+            branch: master
+    runs-on: ubuntu-latest
+    name: '${{ matrix.project.repo }}'
+    env:
+      GH_TOKEN: '${{ github.token }}'
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          cat > ~/.ssh/config <<'EOF'
+          StrictHostKeyChecking no
+          EOF
+      - name: Set up ssh-agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: '${{ secrets.SSH_KEY }}'
+      - name: Checkout
+        run: |
+          git clone -q --single-branch --branch '${{ matrix.project.branch }}' \
+              'ssh://git@github.com/egor-tensin/${{ matrix.project.repo }}.git'
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: '${{ matrix.project.repo }}'
+      - name: Configure git
+        run: |
+          git config --global user.name 'Egor Tensin'
+          git config --global user.email 'egor@tensin.name'
+      - name: Run maintenance
+        id: maintenance
+        run: |
+          cd -- '${{ matrix.project.repo }}'
+          make maintenance
+          commit="$( git rev-parse HEAD )"
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+      - name: Wait until the run is finished
+        run: |
+          sleep 10
+          cd -- '${{ matrix.project.repo }}'
+          commit='${{ steps.maintenance.outputs.commit }}'
+          run_id="$( gh run list --commit "$commit" --json databaseId --jq '.[0].databaseId' )"
+          gh run watch --compact --exit-status "$run_id"
