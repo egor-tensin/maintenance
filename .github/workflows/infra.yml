@@ -1,0 +1,37 @@
+name: infra
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
+      AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
+      DIGITALOCEAN_TOKEN: '${{ secrets.DIGITALOCEAN_TOKEN }}'
+      YC_SERVICE_ACCOUNT_KEY_FILE: '${{ secrets.YC_SERVICE_ACCOUNT_KEY_FILE }}'
+    steps:
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Add SSH key
+        run: |
+          mkdir -p ~/.ssh
+          cat > ~/.ssh/config <<'EOF'
+          StrictHostKeyChecking no
+          EOF
+          cat > ~/.ssh/id_ed25519 <<'EOF'
+          ${{ secrets.SSH_KEY }}
+          EOF
+          chmod 0600 ~/.ssh/id_ed25519
+      - name: Checkout
+        run: |
+          git clone -q ssh://git@bitbucket.org/egor-tensin/infra.git
+      - name: Configure git
+        run: |
+          git config --global user.name 'Egor Tensin'
+          git config --global user.email 'egor@tensin.name'
+      - name: Run maintenance
+        run: |
+          make -C infra maintenance
