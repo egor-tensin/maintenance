@@ -1,9 +1,0 @@
-- name: Update plugins
-  ansible.builtin.command: vagrant plugin update
-
-- name: Prune invalid entries
-  ansible.builtin.command: vagrant global-status --prune
-  become: true
-
-- name: Clean up boxes
-  ansible.builtin.command: vagrant box prune --force --keep-active-boxes

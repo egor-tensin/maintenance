@@ -1,3 +1,0 @@
-dependencies:
-  - role: common
-  - {role: pacman, when: has_pacman}
