@@ -6,6 +6,10 @@ on:
 
 jobs:
 
+  cgitize:
+    secrets: inherit
+    uses: ./.github/workflows/cgitize.yml
+
   infra:
     secrets: inherit
     uses: ./.github/workflows/infra.yml

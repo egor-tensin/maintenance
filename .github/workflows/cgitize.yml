@@ -1,0 +1,48 @@
+name: cgitize
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    name: '${{ matrix.project.repo }}'
+    env:
+      GH_TOKEN: '${{ github.token }}'
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          cat > ~/.ssh/config <<'EOF'
+          StrictHostKeyChecking no
+          EOF
+      - name: Set up ssh-agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: '${{ secrets.SSH_KEY }}'
+      - name: Checkout
+        run: |
+          git clone -q 'ssh://git@github.com/egor-tensin/cgitize.git'
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: cgitize/.python-version
+      - name: Configure git
+        run: |
+          git config --global user.name 'Egor Tensin'
+          git config --global user.email 'egor@tensin.name'
+      - name: Run maintenance
+        id: maintenance
+        run: |
+          cd cgitize
+          make maintenance
+          commit="$( git rev-parse HEAD )"
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+      - name: Wait until the run is finished
+        run: |
+          sleep 10
+          cd cgitize
+          commit='${{ steps.maintenance.outputs.commit }}'
+          run_id="$( gh run list --commit "$commit" --json databaseId --jq '.[0].databaseId' )"
+          gh run watch --compact --exit-status "$run_id"
