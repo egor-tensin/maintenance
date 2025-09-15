@@ -4,6 +4,16 @@ on:
   workflow_call:
   workflow_dispatch:
 
+# For good reasons, GitHub Actions people made the decision to add the
+# container: functionality. For some other reason, when running inside a
+# container:, they made an insane, completely batshit crazy decision to set
+# $HOME to something other than /root. This breaks a bunch of things, which is
+# why all the insanity is there below.
+#
+# makepkg people are similarly insane, which is why they hard-forbid running
+# makepkg as root, because they're crazy. This is cause for the other stupid
+# workarounds below.
+
 jobs:
   maintenance:
     runs-on: ubuntu-latest
@@ -29,13 +39,9 @@ jobs:
           chmod -R o+w yandex-cloud-cli-bin
       - name: Configure git
         run: |
-          # Stupid GitHub Actions sets $HOME to something else other than /root
-          # when using container:, which breaks everything.
           git -C yandex-cloud-cli-bin config --local user.name 'Egor Tensin'
           git -C yandex-cloud-cli-bin config --local user.email 'egor@tensin.name'
       - name: Run maintenance
         run: |
           git config --system --add safe.directory "$( pwd )/yandex-cloud-cli-bin"
-          # Stupid makepkg hard forbids running as root, which is stupid, which
-          # is why I'm doing all of that stupidity here and above.
           runuser -u nobody -- make -C yandex-cloud-cli-bin maintenance
