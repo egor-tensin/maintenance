@@ -23,14 +23,16 @@ jobs:
           ${{ secrets.SSH_KEY }}
           EOF
           chmod 0600 /root/.ssh/id_ed25519
-      - name: Configure git
-        run: |
-          git config --global user.name 'Egor Tensin'
-          git config --global user.email 'egor@tensin.name'
       - name: Checkout
         run: |
           git clone -q ssh://aur@aur.archlinux.org/yandex-cloud-cli-bin.git
           chmod -R o+w yandex-cloud-cli-bin
+      - name: Configure git
+        run: |
+          # Stupid GitHub Actions sets $HOME to something else other than /root
+          # when using container:, which breaks everything.
+          git -C yandex-cloud-cli-bin config --local user.name 'Egor Tensin'
+          git -C yandex-cloud-cli-bin config --local user.email 'egor@tensin.name'
       - name: Run maintenance
         run: |
           git config --system --add safe.directory "$( pwd )/yandex-cloud-cli-bin"
