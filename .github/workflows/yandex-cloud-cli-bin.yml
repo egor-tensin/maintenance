@@ -23,25 +23,25 @@ jobs:
       - name: Install dependencies
         run: |
           pacman -Sy --noconfirm git openssh
+      - name: Add builder user
+        run: |
+          useradd -m -s /bin/bash builder
       - name: Add SSH key
         run: |
-          mkdir -p /root/.ssh/
-          cat > /root/.ssh/config <<'EOF'
+          mkdir -p /home/builder/.ssh/
+          cat > /home/builder/.ssh/config <<'EOF'
           StrictHostKeyChecking no
           EOF
-          cat > /root/.ssh/id_ed25519 <<'EOF'
+          cat > /home/builder/.ssh/id_ed25519 <<'EOF'
           ${{ secrets.SSH_KEY }}
           EOF
-          chmod 0600 /root/.ssh/id_ed25519
-      - name: Checkout
-        run: |
-          git clone -q ssh://aur@aur.archlinux.org/yandex-cloud-cli-bin.git
-          chmod -R o+w yandex-cloud-cli-bin
+          chown -R builder:builder /home/builder/.ssh
+          chmod 0600 /home/builder/.ssh/id_ed25519
       - name: Configure git
         run: |
-          git -C yandex-cloud-cli-bin config --local user.name 'Egor Tensin'
-          git -C yandex-cloud-cli-bin config --local user.email 'egor@tensin.name'
+          runuser -u builder -- git config --global user.name 'Egor Tensin'
+          runuser -u builder -- git config --global user.email 'egor@tensin.name'
       - name: Run maintenance
         run: |
-          git config --system --add safe.directory "$( pwd )/yandex-cloud-cli-bin"
-          runuser -u nobody -- make -C yandex-cloud-cli-bin maintenance
+          runuser -u builder -- git clone -q ssh://aur@aur.archlinux.org/yandex-cloud-cli-bin.git /home/builder/yandex-cloud-cli-bin
+          runuser -u builder -- make -C /home/builder/yandex-cloud-cli-bin maintenance
