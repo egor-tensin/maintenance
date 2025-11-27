@@ -1,0 +1,51 @@
+name: infra-metal
+
+on:
+  workflow_call:
+    inputs:
+      limit:
+        description: 'Ansible hosts'
+        type: string
+        default: all
+        required: false
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Ansible hosts'
+        type: string
+        default: all
+        required: false
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up WireGuard
+        uses: egor-tensin/setup-wireguard@v1
+        with:
+          endpoint: '${{ secrets.WG_ENDPOINT }}'
+          endpoint_public_key: '${{ secrets.WG_ENDPOINT_PUBLIC }}'
+          ips: '${{ secrets.WG_IPS }}'
+          allowed_ips: '${{ secrets.WG_ALLOWED_IPS }}'
+          private_key: '${{ secrets.WG_PRIVATE }}'
+          preshared_key: '${{ secrets.WG_PRESHARED }}'
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          cat > ~/.ssh/config <<'EOF'
+          StrictHostKeyChecking no
+          EOF
+      - name: Set up ssh-agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: '${{ secrets.SSH_KEY }}'
+      - name: Checkout
+        run: |
+          git clone -q ssh://git@bitbucket.org/egor-tensin/infra-metal.git
+      - name: Configure git
+        run: |
+          git config --global user.name 'Egor Tensin'
+          git config --global user.email 'egor@tensin.name'
+      - name: Run maintenance
+        run: |
+          make -C infra-metal maintenance 'LIMIT=${{ inputs.limit }}'
