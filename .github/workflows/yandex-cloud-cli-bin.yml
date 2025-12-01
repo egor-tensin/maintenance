@@ -43,5 +43,5 @@ jobs:
           runuser -u builder -- git config --global user.email 'egor@tensin.name'
       - name: Run maintenance
         run: |
-          runuser -u builder -- git clone -q ssh://aur@aur.archlinux.org/yandex-cloud-cli-bin.git /home/builder/yandex-cloud-cli-bin
+          runuser -u builder -- git clone -q ssh://git@bitbucket.org/egor-tensin/yandex-cloud-cli-bin.git /home/builder/yandex-cloud-cli-bin
           runuser -u builder -- make -C /home/builder/yandex-cloud-cli-bin maintenance
