@@ -7,6 +7,7 @@ on:
 jobs:
   maintenance:
     strategy:
+      fail-fast: false
       matrix:
         project:
           - repo: blog
