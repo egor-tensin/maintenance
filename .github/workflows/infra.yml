@@ -2,7 +2,19 @@ name: infra
 
 on:
   workflow_call:
+    inputs:
+      limit:
+        description: 'Ansible hosts'
+        type: string
+        default: all
+        required: false
   workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Ansible hosts'
+        type: string
+        default: all
+        required: false
 
 jobs:
   maintenance:
@@ -34,4 +46,4 @@ jobs:
           git config --global user.email 'egor@tensin.name'
       - name: Run maintenance
         run: |
-          make -C infra maintenance
+          make -C infra maintenance 'LIMIT=${{ inputs.limit }}'
