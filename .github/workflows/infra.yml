@@ -53,6 +53,10 @@ jobs:
         run: |
           git config --global user.name 'Egor Tensin'
           git config --global user.email 'egor@tensin.name'
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends nmap
       - name: Run maintenance
         run: |
           make -C infra maintenance 'LIMIT=${{ inputs.limit }}'
