@@ -25,15 +25,6 @@ jobs:
       DIGITALOCEAN_TOKEN: '${{ secrets.DIGITALOCEAN_TOKEN }}'
       YC_SERVICE_ACCOUNT_KEY_FILE: '${{ secrets.YC_SERVICE_ACCOUNT_KEY_FILE }}'
     steps:
-      - name: Set up WireGuard
-        uses: egor-tensin/setup-wireguard@v1
-        with:
-          endpoint: '${{ secrets.WG_ENDPOINT }}'
-          endpoint_public_key: '${{ secrets.WG_ENDPOINT_PUBLIC }}'
-          ips: '${{ secrets.WG_IPS }}'
-          allowed_ips: '${{ secrets.WG_ALLOWED_IPS }}'
-          private_key: '${{ secrets.WG_PRIVATE }}'
-          preshared_key: '${{ secrets.WG_PRESHARED }}'
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v4
       - name: Configure SSH
@@ -53,10 +44,22 @@ jobs:
         run: |
           git config --global user.name 'Egor Tensin'
           git config --global user.email 'egor@tensin.name'
+      - name: Run maintenance
+        run: |
+          make -C infra maintenance 'LIMIT=${{ inputs.limit }}'
+      - name: Set up WireGuard
+        uses: egor-tensin/setup-wireguard@v1
+        with:
+          endpoint: '${{ secrets.WG_ENDPOINT }}'
+          endpoint_public_key: '${{ secrets.WG_ENDPOINT_PUBLIC }}'
+          ips: '${{ secrets.WG_IPS }}'
+          allowed_ips: '${{ secrets.WG_ALLOWED_IPS }}'
+          private_key: '${{ secrets.WG_PRIVATE }}'
+          preshared_key: '${{ secrets.WG_PRESHARED }}'
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends nmap
-      - name: Run maintenance
+      - name: Check ports
         run: |
-          make -C infra maintenance 'LIMIT=${{ inputs.limit }}'
+          sudo ./infra/utils/check_ports.py
