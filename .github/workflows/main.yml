@@ -13,10 +13,6 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/infra.yml
 
-  jekyll:
-    secrets: inherit
-    uses: ./.github/workflows/jekyll.yml
-
   yandex-cloud-cli-bin:
     secrets: inherit
     uses: ./.github/workflows/yandex-cloud-cli-bin.yml
