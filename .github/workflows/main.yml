@@ -12,7 +12,3 @@ jobs:
   infra:
     secrets: inherit
     uses: ./.github/workflows/infra.yml
-
-  yandex-cloud-cli-bin:
-    secrets: inherit
-    uses: ./.github/workflows/yandex-cloud-cli-bin.yml
